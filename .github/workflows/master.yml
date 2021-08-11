@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - name: Check Out Branch
+        uses: actions/checkout@v1
 
       - name: Set Up JDK
         uses: actions/setup-java@v1
@@ -20,3 +21,13 @@ jobs:
 
       - name: Build Project
         run: ./gradlew assemble
+
+      - run: mkdir -p outputs/
+      - run: find . -type f -regex ".*\/*\.apk" -exec cp {} outputs/ \;
+
+      - name: Release Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: Builds
+          path: outputs/
+          
